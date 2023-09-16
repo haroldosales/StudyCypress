@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+const { table } = require("console")
+
+
 
 describe('Our first suite', () => {
 
@@ -116,7 +119,7 @@ describe('Our first suite', () => {
         })
   })
 
-  it.only('assert property', () => {
+  it('assert property', () => {
 
     function selectDayFromCurrent(day){
       let date = new Date();
@@ -184,6 +187,82 @@ describe('Our first suite', () => {
     // cy.get('[type="checkbox"]').eq(0).clik({force: true})
     cy.get('[type="checkbox"]').eq(0).check({force: true})
 
+  })
+
+  it('list and dropwdown',() => {
+    cy.visit('/')
+
+    //seection type
+    /*
+    cy.get('nav nb-select').click()
+    cy.get('.options-list').contains('Dark').click()
+    cy.get('nav nb-select').should('contain','Dark')
+    cy.get('nb-layout-header nav').should('have.css','background-color', 'rgb(34, 43, 69)')
+   */
+
+    //2
+    cy.get('nav nb-select').then(dropwdon => {
+      cy.wrap(dropwdon).click()
+      cy.get('.options-list nb-option ').each( (listItem, index) =>  {
+        const itemText = listItem.text().trim()
+
+        const colors = {
+          "Light": "rgb(255, 255, 255)",
+          "Dark":"rgb(34, 43, 69)",
+          "Cosmic":"rgb(50, 50, 89)",
+          "Corporate":"rgb(255, 255, 255)"
+        }
+
+        cy.wrap(listItem).click()
+        cy.wrap(dropwdon).should('contain',itemText)
+        cy.get('nb-layout-header nav').should('have.css','background-color', colors[itemText])
+        if(index < 3)
+        {
+          cy.wrap(dropwdon).click()
+
+        }
+
+      })
+    })
+
+  } )
+
+  it.only(' Web tables',() => {
+    cy.visit('/')
+    cy.contains('Tables & Data').click()
+    cy.contains('Smart Table').click()
+
+    cy.get('tbody').contains('tr','Larry').then(tableRow => {
+      cy.wrap(tableRow).find('.nb-edit').click()
+      cy.wrap(tableRow).find('[placeholder="Age"]').clear().type('180')
+      cy.wrap(tableRow).find('.nb-checkmark').click()
+      cy.wrap(tableRow).find('td').eq(6 ).should('contain','180')
+    })
+
+    cy.get('thead').find(".nb-plus").click()
+    cy.get('thead').contains('th','Actions').then(tableAdd => {
+      cy.wrap(tableAdd).get('td').find('[placeholder="ID"]').type('01')
+      cy.wrap(tableAdd).get('td').find('[placeholder="First Name"]').type('yrd')
+      cy.wrap(tableAdd).get('td').find('[placeholder="Last Name"]').type('ds')
+      cy.wrap(tableAdd).get('td').find('[placeholder="Username"]').type('saasasa')
+      cy.wrap(tableAdd).get('td').find('[placeholder="E-mail"]').type('dd@ddd.com')
+      cy.wrap(tableAdd).get('td').find('[placeholder="Age"]').type('18')
+      cy.wrap(tableAdd).get('td').find('.ng2-smart-action-add-create').click()
+
+
+    })
+    cy.get('thead').find(".nb-plus").click()
+    cy.get('thead').contains('th','Actions').then(tableAdd => {
+      cy.wrap(tableAdd).get('td').find('[placeholder="ID"]').type('01')
+      cy.wrap(tableAdd).get('td').find('[placeholder="First Name"]').type('yrd')
+      cy.wrap(tableAdd).get('td').find('[placeholder="Last Name"]').type('ds')
+      cy.wrap(tableAdd).get('td').find('[placeholder="Username"]').type('saasasa')
+      cy.wrap(tableAdd).get('td').find('[placeholder="E-mail"]').type('dd@ddd.com')
+      cy.wrap(tableAdd).get('td').find('[placeholder="Age"]').type('18')
+      cy.wrap(tableAdd).get('td').find('.ng2-smart-action-add-cancel').click()
+
+
+    })
   })
 
 
