@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 
-const { table } = require("console")
-
 
 
 describe('Our first suite', () => {
@@ -13,14 +11,14 @@ describe('Our first suite', () => {
     cy.contains('Form Layouts').click()
     //by Tag Name
     cy.get('input')
-    // by ID
+    // by IDss
     cy.get('#inputEmail1')
     //by Class name
     cy.get('.input-full-width')
 
     //by attribute name
     cy.get('[placeholder]')
-
+sas
     //by attrute name and value
     cy.get('[placeholder="Email"]')
 
